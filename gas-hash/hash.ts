@@ -3,6 +3,23 @@ import { ethers } from "ethers";
 import * as crypto from 'crypto';
 import * as readline from 'readline-sync';
 
+// Gas Price Calculation
+function calculateGasFee() {
+  // Prompt for gas price (in Gwei)
+  const gasPriceGwei = parseFloat(
+    readline.question("Enter gas price in Gwei: "),
+  );
+
+  // Prompt for gas used (in units)
+  const gasUsed = parseFloat(readline.question("Enter gas used: "));
+
+  // Calculate total gas fee in ETH
+  const totalGasFee = (gasPriceGwei * gasUsed) / 1e9; // Convert Gwei to ETH
+  console.log(`Total Gas Fee: ${totalGasFee} ETH`);
+}
+
+// Merkle Root Calculations
+
 // Helper function to hash using the SHA256 algorithm
 function sha256Hash(first: Buffer, second: Buffer): string {
   const combinedLeaf = Buffer.concat([first, second]);
@@ -81,15 +98,14 @@ function shaHashingFunction() {
 
     // Append transaction hash to the array
     transactionHashes.push(txHash);
+
+    console.log("");
   }
 
   // Merkle Root Calculation
   const sha256Root = buildMerkleRoot(transactionHashes, sha256Hash);
   console.log("\n Merkle Root with SHA256: ", sha256Root);
 }
-
-
-
 
 function keccakHashingFunction() {
   // Prompt User for the Number of Transactions
@@ -125,6 +141,8 @@ function keccakHashingFunction() {
 
     // Append transaction hash to the array
     transactionHashes.push(txHash);
+
+    console.log("");
   }
 
   // Merkle Root Calculation
@@ -132,10 +150,13 @@ function keccakHashingFunction() {
   console.log("\n Merkle Root with Keccak256: ", keccak256Root);
 }
 
+// Run the gas fee calculator
+calculateGasFee();
 
+// Run the hashing functions
 shaHashingFunction();
-
 keccakHashingFunction();
+
 
 
 
